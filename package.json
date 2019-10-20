@@ -1,0 +1,9 @@
+{
+  "name": "webapp-101",
+  "version": "1.0.0",
+  "description": "webapp test",
+  "main": "index.js",
+  "repository": "git@github.com:Mizux/webapp-101.git",
+  "author": "Mizux Seiha <mizux.dev@gmail.com>",
+  "license": "Apache-2.0"
+}
