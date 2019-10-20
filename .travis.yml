@@ -9,14 +9,20 @@ install: true
 # `travis_terminate 1`
 script:
   - >
-    echo 'travis_fold:start:docker'
-    && make docker
-    && echo 'travis_fold:end:docker'
+    echo 'travis_fold:start:build_env'
+    && make build_env
+    && echo 'travis_fold:end:build_env'
     || travis_terminate 1
 
   - >
-    echo 'travis_fold:start:test'
-    && make test
-    && echo 'travis_fold:end:test'
+    echo 'travis_fold:start:build_devel'
+    && make build_devel
+    && echo 'travis_fold:end:build_devel'
+    || travis_terminate 1
+
+  - >
+    echo 'travis_fold:start:test_devel'
+    && make test_devel
+    && echo 'travis_fold:end:test_devel'
     || travis_terminate 1
 
