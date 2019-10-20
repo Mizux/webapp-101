@@ -84,7 +84,7 @@ serve: cache/docker_devel.tar
 # TEST
 .PHONY: test
 test: serve
-	@until $$(curl --output /dev/null --silent --head --fail localhost:${HOST_PORT}); do echo '.'; sleep 1; done
+	@timeout 10 sh -c 'until $$(curl --output /dev/null --silent --head --fail localhost:${HOST_PORT}); do echo "."; sleep 1; done'
 	@curl -i localhost:${HOST_PORT}
 	@docker stop ${IMAGE} 1>/dev/null
 
