@@ -60,7 +60,7 @@ DOCKER_RUN_CMD := docker run -p ${HOST_PORT}:8080 --rm --init --name ${IMAGE}
 # $< first prerequist
 # $@ target name
 
-# DOCKER: Create devel image
+# DOCKER: Build the devel image
 .PHONY: docker
 docker: cache/docker_devel.tar
 cache/docker_devel.tar: docker/Dockerfile package.json
@@ -70,21 +70,25 @@ cache/docker_devel.tar: docker/Dockerfile package.json
 	@rm -f $@
 	docker save ${IMAGE}:devel -o $@
 
-# DOCKER BASH: Inspect devel image (debug)
+# DOCKER BASH: Inspect the devel image (debug)
 .PHONY: bash
 bash: cache/docker_devel.tar
 	${DOCKER_RUN_CMD} -it ${IMAGE}:devel /bin/sh
 
-# DOCKER SERVE
+# DOCKER SERVE: Run the server
 .PHONY: serve
 serve: cache/docker_devel.tar
 	-docker stop ${IMAGE} 2>/dev/null | true
 	${DOCKER_RUN_CMD} -d ${IMAGE}:devel
 
-# TEST
+# TEST: Verify server is running
 .PHONY: test
 test: serve
-	@timeout 10 sh -c 'until $$(curl --output /dev/null --silent --head --fail localhost:${HOST_PORT}); do echo "."; sleep 1; done'
+	@timeout 10 sh -c \
+ 'until $$(curl --output /dev/null --silent --head --fail localhost:${HOST_PORT}); do \
+   echo "."; \
+   sleep 1; \
+ done'
 	@curl -i localhost:${HOST_PORT}
 	@docker stop ${IMAGE} 1>/dev/null
 
