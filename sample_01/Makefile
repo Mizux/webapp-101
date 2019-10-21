@@ -1,4 +1,4 @@
-PROJECT := webapp_101
+PROJECT := webapp_01
 BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 SHA1 := $(shell git rev-parse --verify HEAD)
 HOST_PORT := 8080
@@ -43,6 +43,7 @@ help:
 all: serve
 
 # Delete all implicit rules to speed up makefile
+MAKEFLAGS += --no-builtin-rules
 .SUFFIXES:
 # Remove some rules from gmake that .SUFFIXES does not remove.
 SUFFIXES =
@@ -91,7 +92,7 @@ run_env: cache/docker_env.tar
 # Build the devel image.
 .PHONY: build_devel
 build_devel: cache/docker_devel.tar
-cache/docker_devel.tar: docker/Dockerfile cache/docker_env.tar
+cache/docker_devel.tar: docker/Dockerfile cache/docker_env.tar package.json index.js
 	mkdir -p cache
 	@docker image rm -f ${IMAGE}:devel 2>/dev/null
 	${DOCKER_BUILD_CMD} --target=devel -t ${IMAGE}:devel -f $< .

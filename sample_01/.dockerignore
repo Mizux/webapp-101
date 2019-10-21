@@ -1,10 +1,5 @@
 # Project Files unneeded by docker
-.git
-.gitignore
 .dockerignore
-.travis.yml
-AUTHORS
-LICENSE
 README.md
 
 .DS_Store
