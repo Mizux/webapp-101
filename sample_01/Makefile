@@ -163,6 +163,6 @@ clean:
 	-rmdir cache
 
 .PHONY: distclean
-distclean:
-	docker container rm -f $$(docker container ls -aq)
-	docker image rm -f $$(docker image ls -aq)
+distclean: clean
+	-docker container rm -f $$(docker container ls -aq)
+	-docker image rm -f $$(docker image ls -aq)
