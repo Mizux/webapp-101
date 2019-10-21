@@ -5,6 +5,7 @@ dist: bionic
 matrix:
   include:
     - env: SAMPLE=sample_01
+    - env: SAMPLE=sample_02
 
 # no install step to perform
 install: true
