@@ -24,11 +24,14 @@ help:
 	@echo -e "\t${BOLD}build_devel${RESET}: build a webapp devel image."
 	@echo -e "\t${BOLD}run_devel${RESET}: run a container using the devel image (debug purpose)."
 	@echo -e "\t${BOLD}start_devel${RESET}: run the webapp inside a devel image container."
+	@echo -e "\t${BOLD}stop_devel${RESET}: stop the webapp inside a devel image container."
 	@echo -e "\t${BOLD}test_devel${RESET}: auto test using the devel image."
 	@echo
 	@echo -e "\t${BOLD}build_prod${RESET}: build a webapp production image."
 	@echo -e "\t${BOLD}run_prod${RESET}: run a container using the production image (debug purpose)."
 	@echo -e "\t${BOLD}start_prod${RESET}: run the webapp inside a production image container."
+	@echo -e "\t${BOLD}stop_prod${RESET}: stop the webapp inside a production image container."
+	@echo -e "\t${BOLD}test_prod${RESET}: auto test using the production image."
 	@echo
 	@echo -e "\t${BOLD}clean${RESET}: Remove log files and docker image."
 	@echo
@@ -101,14 +104,18 @@ cache/docker_devel.tar: docker/Dockerfile cache/docker_env.tar package.json inde
 
 # Run a container using the devel image.
 .PHONY: run_devel
-run_devel: cache/docker_devel.tar
+run_devel: cache/docker_devel.tar stop_devel
 	${DOCKER_RUN_CMD} -it ${IMAGE}:devel /bin/sh
 
 # Run the webapp inside the devel image.
 .PHONY: start_devel
-start_devel: cache/docker_devel.tar
-	-docker stop ${IMAGE} 2>/dev/null | true
+start_devel: cache/docker_devel.tar stop_devel
 	${DOCKER_RUN_CMD} -d ${IMAGE}:devel
+
+# Stop the webapp inside the devel image.
+.PHONY: stop_devel
+stop_devel:
+	docker stop ${IMAGE} || true
 
 # Verify server is running.
 .PHONY: test_devel
@@ -137,14 +144,29 @@ cache/docker_prod.tar: docker/Dockerfile cache/docker_devel.tar
 
 # Run a container using the prod image.
 .PHONY: run_prod
-run_prod: cache/docker_prod.tar
+run_prod: cache/docker_prod.tar stop_prod
 	${DOCKER_RUN_CMD} -it ${IMAGE}:prod /bin/sh
 
 # Run the webapp inside the prod image.
 .PHONY: start_prod
-start_prod: cache/docker_prod.tar
-	-docker stop ${IMAGE} 2>/dev/null | true
+start_prod: cache/docker_prod.tar stop_prod
 	${DOCKER_RUN_CMD} -d ${IMAGE}:prod
+
+# Stop the webapp inside the prod image.
+.PHONY: stop_prod
+stop_prod:
+	docker stop ${IMAGE} || true
+
+# Verify server is running.
+.PHONY: test_prod
+test_prod: start_prod
+	@timeout 10 sh -c \
+ 'until $$(curl --output /dev/null --silent --head --fail localhost:${HOST_PORT}); do \
+   echo "."; \
+   sleep 1; \
+ done'
+	@curl -i localhost:${HOST_PORT}
+	@docker stop ${IMAGE} 1>/dev/null
 
 
 #########
