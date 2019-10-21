@@ -24,11 +24,14 @@ help:
 	@echo -e "\t${BOLD}build_devel${RESET}: build a webapp devel image."
 	@echo -e "\t${BOLD}run_devel${RESET}: run a container using the devel image (debug purpose)."
 	@echo -e "\t${BOLD}start_devel${RESET}: run the webapp inside a devel image container."
+	@echo -e "\t${BOLD}stop_devel${RESET}: stop the webapp inside a devel image container."
 	@echo -e "\t${BOLD}test_devel${RESET}: auto test using the devel image."
 	@echo
 	@echo -e "\t${BOLD}build_prod${RESET}: build a webapp production image."
 	@echo -e "\t${BOLD}run_prod${RESET}: run a container using the production image (debug purpose)."
 	@echo -e "\t${BOLD}start_prod${RESET}: run the webapp inside a production image container."
+	@echo -e "\t${BOLD}stop_prod${RESET}: stop the webapp inside a production image container."
+	@echo -e "\t${BOLD}test_prod${RESET}: auto test using the production image."
 	@echo
 	@echo -e "\t${BOLD}clean${RESET}: Remove log files and docker image."
 	@echo
