@@ -11,7 +11,8 @@ Thus the project layout is as follow:
 # Project Step
 
 ## Step 1: Environment Setup
-First things first, let's setting up a development environment, you'll need these packages.  
+First, setup a native development environment on various GNU/Linux distro
+or using the official [node:alpine](https://hub.docker.com/_/node/) docker image.  
 
 You'll need:
 - **nodejs**,
@@ -26,7 +27,7 @@ export PATH=$PATH:${NPM_CONFIG_PREFIX}/bin
 npm install --global yarn
 ```
 
-You can also use the official docker image
+note: You can also use the official docker image
 [node:alpine](https://hub.docker.com/_/node/).  
 
 ## Step 2: Create a new project
@@ -53,7 +54,7 @@ Done in 78.63s.
 ```
 
 ## Step 3: Add Dependencies
-Let's add the `http` dependency using:
+Let's add [http](https://nodejs.org/api/http.html) as dependency using:
 ```sh
 yarn add http
 ```
@@ -66,8 +67,10 @@ yarn install
 ## Step 4: Write our server entry point
 Create the file `index.js` and add this content:
 ```js
-const http = require('http')
-const port = 8080
+'use strict';
+
+const http = require('http');
+const port = 8080;
 
 const requestHandler = (request, response) => {
   console.log(request.url)
@@ -76,12 +79,12 @@ const requestHandler = (request, response) => {
 
 const server = http.createServer(requestHandler)
 
-server.listen(port, (err) => {
+server.listen(PORT, (err) => {
   if (err) {
     return console.log('something bad happened', err)
   }
 
-  console.log(`server is listening on ${port}`)
+  console.log(`server is listening on ${PORT}`)
 })
 ```
 
