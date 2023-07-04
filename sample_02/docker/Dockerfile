@@ -1,6 +1,6 @@
 # Create a virtual environment with all tools installed
 FROM node:alpine AS env
-LABEL maintainer="mizux.dev@gmail.com"
+
 # Install/Configure nodejs, npm, yarn
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV PATH=$PATH:/home/node/.npm-global/bin
@@ -29,7 +29,7 @@ CMD [ "yarn", "start" ]
 
 # Create a production image
 FROM node:alpine AS prod
-LABEL maintainer="mizux.dev@gmail.com"
+
 # Create app directory
 WORKDIR /home/node/app
 # Copy app from devel to prod
